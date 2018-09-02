@@ -6,7 +6,7 @@ import { Link, NavLink } from 'react-router-dom';
 const Header = props => {
   const { branding } = props;
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4 py-2">
+    <nav className="navbar fixed-top navbar-expand-sm navbar-dark bg-dark mb-4 py-2">
       <div className="container">
         <Link exact to="/" className="navbar-brand">
         <img className="rotate" src={logo} width="50" height="50" alt="React Logo" /> &nbsp;

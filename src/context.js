@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
 const Context = React.createContext();
 
@@ -9,14 +10,34 @@ const reducer = (state, action) => {
         ...state,
         contacts: state.contacts.filter(
           contact => contact.id !== action.payload
-        )
+        ),
+        singleContact:  {
+          id: 0,
+          name: 'Name',
+          email: '',
+          phone: ''
+        },
       };
 
-      case "ADD_CONTACT":
+    case "ADD_CONTACT":
       return {
         ...state,
-        contacts: [action.payload, ...state.contacts]
+        contacts: [action.payload, ...state.contacts],
+        singleContact: action.payload
       };
+    
+    case "SINGLE_CONTACT":
+      return {
+        ...state,
+        singleContact: action.payload
+      };
+    
+    case "UPDATE_CONTACT":
+      return {
+        ...state,
+        contacts: state.contacts.map(contact => contact.id === action.payload.id ? (contact = action.payload) : contact)
+      }
+
     default:
       return state;
   }
@@ -24,65 +45,24 @@ const reducer = (state, action) => {
 
 export class Provider extends Component {
   state = {
-    contacts: [
-      {
-        id: 1,
-        name: "Camila Avelar",
-        email: "camila@gmail.com",
-        phone: "5555-5555"
-      },
-      {
-        id: 2,
-        name: "Carlos Ayala",
-        email: "cayala@gmail.com",
-        phone: "3333-5555"
-      },
-      {
-        id: 3,
-        name: "Brenda Marroquin",
-        email: "brenda@gmail.com",
-        phone: "9999-9999"
-      },
-      {
-        id: 4,
-        name: "Felix Avelar",
-        email: "felixavco@gmail.com",
-        phone: "7777-7777"
-      },
-      {
-        id: 5,
-        name: "Federico Lozano",
-        email: "flozano@gmail.com",
-        phone: "8888-2222"
-      },
-      {
-        id: 6,
-        name: "Denis Avelar",
-        email: "davelar@gmail.com",
-        phone: "5555-7777"
-      },
-      {
-        id: 7,
-        name: "Eduardo Lopez",
-        email: "elopez@gmail.com",
-        phone: "5555-3333"
-      },
-      {
-        id: 8,
-        name: "Alberto Castro",
-        email: "acastro@gmail.com",
-        phone: "3333-7777"
-      },
-      {
-        id: 9,
-        name: "Ana Cevallos",
-        email: "acevallos@gmail.com",
-        phone: "9999-5555"
-      }
-    ],
+    contacts: [],
 
-    dispatch: action => this.setState(state => reducer(state, action))
+  singleContact : {
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+    website: '',
+  },
+
+  dispatch: action => this.setState(state => reducer(state, action))
   };
+
+  async componentDidMount(){
+    const res = await axios.get('https://jsonplaceholder.typicode.com/users');
+
+    this.setState({contacts: res.data})
+  }
 
   render() {
     return (

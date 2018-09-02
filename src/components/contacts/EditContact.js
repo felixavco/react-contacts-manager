@@ -3,7 +3,7 @@ import { Consumer } from "../../context";
 import InputGroup from "../layout/InputGroup";
 import axios from 'axios'
 
-class AddContact extends Component {
+class EditContact extends Component {
   state = {
     name: "",
     email: "",
@@ -11,6 +11,20 @@ class AddContact extends Component {
     website: "",
     errors: {}
   };
+
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+
+    const {name, email, phone, website} = res.data;
+
+    this.setState({
+      name,
+      email,
+      phone,
+      website
+    })
+  }
 
   onSubmitHandler = async (dispatch, e) => {
     e.preventDefault();
@@ -37,17 +51,18 @@ class AddContact extends Component {
       return false
     }
 
-    const newContact = {
-      name,
+    const UpdatedContact = {
+      name, 
       email,
       phone, 
       website
-    };
+    }
 
-    const res = await axios.post('https://jsonplaceholder.typicode.com/users', newContact)
+    const { id } = this.props.match.params;
 
-    dispatch({ type: "ADD_CONTACT", payload: res.data })
+    const res = await axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, UpdatedContact);
 
+    dispatch({type: 'UPDATE_CONTACT', payload: res.data})
 
     this.setState({
       name: "",
@@ -71,7 +86,7 @@ class AddContact extends Component {
           const { dispatch } = value;
           return (
             <div className="card-custom mb-3 no-scroll">
-              <div className="card-header"><h3 className="text-center">Add Contact &nbsp; <i class="fas fa-user-plus"></i></h3></div>
+              <div className="card-header"><h3 className="text-center">Edit Contact &nbsp; <i class="fas fa-user-edit"></i></h3></div>
               <div className="card-body">
                 <form onSubmit={this.onSubmitHandler.bind(this, dispatch)}>
                   <InputGroup
@@ -112,7 +127,7 @@ class AddContact extends Component {
                   />
 
                   <button type="submit" className="btn btn-info btn-block">
-                    Add Contact
+                    Update Contact
                   </button>
                 </form>
               </div>
@@ -124,4 +139,4 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+export default EditContact;
