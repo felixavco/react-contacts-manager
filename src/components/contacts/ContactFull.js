@@ -32,9 +32,9 @@ class ContactFull extends Component {
                   </div>
                 </div>
                   <ul className="list-group">
-                    <li className="list-group-item"><strong>Email:</strong> <a href={mailto} target="_blank"> {email}</a></li>
-                    <li className="list-group-item"><strong>Phone:</strong> <a href={tel} target="_blank">{phone}</a></li>
-                    <li className="list-group-item"><strong>Website:</strong> <a href={`http://${website}`} target="_blank">{website}</a></li>
+                    <li className="list-group-item"><strong>Email:</strong> <a href={mailto}> {email}</a></li>
+                    <li className="list-group-item"><strong>Phone:</strong> <a href={tel}>{phone}</a></li>
+                    <li className="list-group-item"><strong>Website:</strong> <a href={`http://${website}`} target="_blank" rel="noopener noreferrer">{website}</a></li>
                   </ul>
                 </div>
               </div>
